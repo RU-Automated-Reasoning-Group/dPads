@@ -1,8 +1,8 @@
-# Differentiable Synthesis of Program Architecture
+# Differentiable Program Synthesis
 ---
 
 ## Introduction
-We propose a differentiable architecture search method for program synthesis, including top-$N$ preservation and variant of A$^*$ search. This README file is created for execution guidance, including requirement to run the code and how to implement experiment. Besides, we also show some experiment results here.
+We propose a differentiable approach for synthesizing differentiable programs [paper](https://openreview.net/forum?id=ivXd1iOKx9M).
 
 ## Requirements
 - Python 3.6+
@@ -12,54 +12,56 @@ We propose a differentiable architecture search method for program synthesis, in
 - tqdm
 
 ## Code Structures
-- `train_nas.py` includes main function to start program architecture search with program derivation graph. It also create necessary parameter list for program derivation graph class and call functions to start the search.
-- `eval_test.py` is created for evaluation. Given synthesized program, this file could be called to test F1 score, accuracy on defined dataset.
-- `dsl_*.py` are files defining specific parameter functions to extract feature for related dataset.
-- `dsl/` contains common grammars in our DSL to synthesize a program.
-- `algorithms/` contains the main file `nas.py` to search program architecture with top-$N$ preservation and A$^*$ search.
-- `program_graph.py` defines program derivation graph, including nodes, edges and graph structure.
-- `utils/` contains useful codes for dataloader, loss function, evaluation and creating logs file.
+- `train_nas.py` includes the main function to synthesize differentiable programs.
+- `eval_test.py` is used for evaluation. Given a synthesized program, it calculates the program's F1 score and accuracy on a dataset.
+- `dsl_*.py` defines the parameterized domain-specific languages for the benchmarks.
+- `dsl/` includes the semantics of the predefined domain-specific languages.
+- `algorithms/` contains the main synthesis algorithm (`nas.py`).
+- `program_graph.py` defines our algorithm's learning representation.
+- `utils/` includes useful code for data loading, loss functions, etc.
 
 ## Run the Code
-#### Program Architecture Search
-To synthesize program with dPads, use `train_nas*.sh` files with command `sh train_nas*.sh`. 
-- To search for program on Crim13 dataset, please run `sh train_nas.sh`; 
-- To search program on Fly-vs-fly dataset, please run `sh train_nas_fly.sh`; 
-- To search program on Basketball dataset, please run `sh train_nas_basketball.sh`; 
-- To search program on SK152 dataset, please run `sh train_nas_sk152.sh`.
+#### Program Search
+- To search a programmatic classifier for the Crim13 dataset, run `sh train_nas.sh`; 
+- To search a programmatic classifier for the Fly-vs-fly dataset, run `sh train_nas_fly.sh`; 
+- To search a programmatic classifier for the Basketball dataset, run `sh train_nas_basketball.sh`; 
+- To search a programmatic classifier for the SK152 dataset, run `sh train_nas_sk152.sh`.
 
-#### Evaluation
-To evaluate sythesized program on test set, use `sh eval_test.sh`.
+#### Program Evaluation
+To evaluate a synthesized program on its test dataset, use `sh eval_test.sh`.
 
-#### Implement Code for NEAR
+#### Comparision against NEAR
 
-To run experiment of NEAR, please download the code and follow the instruction [here](https://github.com/trishullab/near). NEAR contains similar argument as ours and our released datasets can be directly used in code of NEAR.
+To run NEAR with our released datasets, please download its source code and follow the instructions from [here](https://github.com/trishullab/near).
 
 ## Data
 
-All the data we use to synthesize program can be downloaded from [google drive](https://drive.google.com/drive/folders/1NWn1VXJKk1GowsDOZfzcnVR5vd46u5Jy?usp=sharing).
-#### Crim13 dataset
-To search program on Crim13 dataset, please refer to [NEAR](https://github.com/trishullab/near/tree/master/near_code) github to download related dataset and save the `crim13_processed` directory in path `data/`. Users could also modify command-line arguments `--train_data`, `--valid_data`, `--test_data`, `--train_labels`, `--valid_labels` and `--test_labels` to custom path of data.
+All the datasets can be downloaded from [here](https://drive.google.com/drive/folders/1NWn1VXJKk1GowsDOZfzcnVR5vd46u5Jy?usp=sharing).
 
-#### Fly-vs-fly dataset
-The original dataset could be downloaded [here](https://data.caltech.edu/records/1893), which includes videos and extracted feature trajectory. Processed dataset used in our experiment are contained in `fly_process` directory of google drive.
+## More Details about dPads's Command-line Arguments for Sequence Classification
 
-#### Basketball dataset
-The original of Basketball dataset could be download in [aws](https://aws.amazon.com/marketplace/pp/prodview-7kigo63d3iln2?qid=1606330770194&sr=0-1&ref_=srh_res_product_title#offers). User could download processed dataset in `basketball_processed` directory of google drive.
+`--input_type` and `--output_type` defines if the program input/output data is over "list" or "atom". "list" refers to sequences of data and "atom" refers to values. 
 
-#### Skeletics-152 dataset
-The original Skeletic-152 dataset could be accessed from [here](https://github.com/skelemoa/quovadis/tree/master/skeletics-152). The process dataset for our experiment could be downloaded in `sk152_process`
+`--input_size` and `--output_size` defines the dimension of each frame in an input (output) sequence.
 
-## More Details on Command-line Arguments
+`--num_label` defines the number of classification categories for a sequence classification task.
 
-To specific details of dataset, `--input_type` and `--output_type` illustrate whether input/output data is "list" or "atom". "list" refers to sequence data and "atom" refers to value. `--input_size` and `--output_size` indicate the dimension of each atom in input/output data, `--num_label` indicates number of categories in the task.
+`--lossfxn` defines the loss function for training. The choices include "crossentropy", "bcelogits" and "softf1". 
 
-For training setting, `--lossfxn` refers to specific kind of loss function applied to train derivation graph, choices include "crossentropy", "bcelogits" and "softf1". `--max_depth` indicates the depth limitation of derivation graph, `--symbolic_epochs` refers to number of epochs for iterative training, `--neural_epochs` refers to number of epochs during finetuning. `--train_valid_split` defines the ratio to split train and valid data for iterative training, and `--batch_size` refers to number of data in a batch for entire training and searching process.
+`--max_depth` defines the maximum depth of the abstract syntax tree of any synthesized program. 
 
-Moreover, as mentioned in our paper, node-sharing and graph iterative unfolding are leveraged to reduce complexity of dPads, as specific by `--node_share` and `--graph_unfold`. User can reproduce ablation study results in the paper by de-activing either argument.
+`--symbolic_epochs` defines the number of epochs used for program search on top of a program derivation graph.
+
+`--neural_epochs` defines the number of epochs used for program selection from a trained program derivation graph. 
+
+`--train_valid_split` defines the ratio to split the training dataset for synthesizing program structures and program parameters.
+
+`--batch_size` defines the batch size for training.
+
+`--node_share` and `--graph_unfold`. Please refer to the ablation study section of our paper.
 
 ## Experiment Results
-We pick 5 random seeds (0,1000,2000,3000,4000) and run dPads to synthsize program architectures on four datasets. Propose dPads achieve current state-of-the-art results.
+We report dPad's results on the four datesets, averaged over 5 random seeds (0,1000,2000,3000,4000):
 
 ||Crim13|Fly-vs-fly|Basketball|SK152|
 |:---|:---:|:---:|:---:|:---:|
