@@ -2,7 +2,7 @@
 ---
 
 ## Introduction
-We propose a differentiable approach for synthesizing differentiable programs [paper](https://openreview.net/forum?id=ivXd1iOKx9M).
+We propose a differentiable approach for synthesizing differentiable programs [paper](https://proceedings.neurips.cc/paper/2021/file/5c5a93a042235058b1ef7b0ac1e11b67-Paper.pdf).
 
 ## Requirements
 - Python 3.6+
