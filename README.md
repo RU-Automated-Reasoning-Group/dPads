@@ -65,6 +65,6 @@ We report dPad's results on the four datesets, averaged over 5 random seeds (0,1
 
 ||Crim13|Fly-vs-fly|Basketball|SK152|
 |:---|:---:|:---:|:---:|:---:|
-|**F1**|0.458|0.887|0.945|0.337|
+|**F1 Scores**|0.458|0.887|0.945|0.337|
 |**Accuracy**|0.812|0.853|0.939|0.337|
-|**Time (min)**|147.87|348.25|174.68|162.70|
+|**Time (mins)**|147.87|348.25|174.68|162.70|
