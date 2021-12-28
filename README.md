@@ -2,7 +2,7 @@
 ---
 
 ## Introduction
-We propose a differentiable approach for synthesizing differentiable programs [paper](https://proceedings.neurips.cc/paper/2021/file/5c5a93a042235058b1ef7b0ac1e11b67-Paper.pdf).
+We propose a differentiable approach for synthesizing differentiable programs. More details on [Differentiable Synthesis of Program Architectures](https://proceedings.neurips.cc/paper/2021/file/5c5a93a042235058b1ef7b0ac1e11b67-Paper.pdf).
 
 ## Requirements
 - Python 3.6+
@@ -36,7 +36,7 @@ To run NEAR with our released datasets, please download its source code and foll
 
 ## Data
 
-All the datasets can be downloaded from [here](https://drive.google.com/drive/folders/1NWn1VXJKk1GowsDOZfzcnVR5vd46u5Jy?usp=sharing).
+All the datasets can be downloaded from [here](https://drive.google.com/drive/folders/1zklZkY5TalboxlbZTqkMdUkYN4Ag9iog?usp=sharing).
 
 ## More Details about dPads's Command-line Arguments for Sequence Classification
 
